@@ -1,12 +1,25 @@
 import React, { useState } from "react";
 
 const Form = () => {
-  const [allData, setAllData] = useState();
+  const [allData, setAllData] = useState(() => {
+    const getLocalData = localStorage.getItem("data");
+    return getLocalData ? JSON.parse(getLocalData) : {};
+  });
 
   const [formData, setFormData] = useState({});
 
   const handleForm = (e) => {
     e.preventDefault();
+
+    const name = formData.webName;
+
+    const updatedData = {
+      ...allData,
+      [name]: formData,
+    };
+
+    localStorage.setItem("data", JSON.stringify(updatedData));
+    setAllData(updatedData);
   };
 
   return (
