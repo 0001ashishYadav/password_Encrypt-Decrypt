@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import CryptoJS from "crypto-js";
+
 const Form = () => {
   const [allData, setAllData] = useState(() => {
     const getLocalData = localStorage.getItem("data");
@@ -8,14 +10,31 @@ const Form = () => {
 
   const [formData, setFormData] = useState({});
 
+  const [secretKey, setSecretKey] = useState("");
+
   const handleForm = (e) => {
     e.preventDefault();
 
     const name = formData.webName;
 
+    if (!secretKey) {
+      alert("please enter secret key");
+      return;
+    }
+
+    const encryptedPassword = CryptoJS.AES.encrypt(
+      formData.password,
+      secretKey
+    ).toString();
+
+    const newEntry = {
+      ...formData,
+      password: encryptedPassword,
+    };
+
     const updatedData = {
       ...allData,
-      [name]: formData,
+      [name]: newEntry,
     };
 
     localStorage.setItem("data", JSON.stringify(updatedData));
@@ -70,6 +89,7 @@ const Form = () => {
 
       <textarea
         rows={4}
+        onChange={(e) => setSecretKey(e.target.value)}
         className="border-2 border-gray-400 w-full p-2"
       ></textarea>
 
