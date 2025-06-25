@@ -1,9 +1,11 @@
-import { useState } from "react";
+import Form from "./components/Form";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <>hello</>;
+  return (
+    <section className="h-screen w-full flex justify-center items-center">
+      <Form />
+    </section>
+  );
 }
 
 export default App;
